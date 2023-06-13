@@ -1,0 +1,12 @@
+.admin {
+    width: 70%;
+    height: 70vh;
+    position: absolute;
+    right:0;
+    left: 0;
+    bottom: 0;
+    top: 10%;
+    margin: auto;
+    overflow: auto;
+}
+

@@ -1,0 +1,35 @@
+.addpost {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    height: 100vh;
+}
+
+.addform {
+    width: 600px;
+    height: 600px;
+    padding-top: 2rem;
+}
+
+.addform input {
+    height: 35px;
+    border-radius: 10px;
+    border: 1px solid black;
+    outline: none;
+    padding: 8px;
+}
+
+.addform textarea {
+    border-radius: 10px;
+    padding: 8px;
+}
+
+.addform button {
+    width: 100px;
+}
+
+
+
+
