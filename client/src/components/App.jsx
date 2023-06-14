@@ -16,7 +16,8 @@ const App = () => {
       email: "",
       password: ""
   });
- 
+  
+  
   const [error,setError] = useState("");
   const [postTitle,setPostTitle] = useState("");
   const [postBody,setPostBody] = useState("");

@@ -6,6 +6,7 @@ import axios from 'axios';
 
 const MainPage = () => {
 
+    const [logUser,setLogUser] = useState("");
     const [allDiaries,setAllDiaries] = useState([]);
     const [isLoading,setIsLoading] = useState(true);
     const {id} = useParams();
@@ -14,7 +15,10 @@ const MainPage = () => {
         const fetchDiary = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/diary/${id}`);
-                const diaries = response.data;
+                
+                const diaries = response.data.diary;
+                const userName = response.data.firstName;
+                setLogUser(userName);
                 setAllDiaries(diaries);
             }
             catch(error) {
@@ -37,6 +41,7 @@ const MainPage = () => {
             {isLoading && <p style={{textAlign: "center"}}>Loading items...</p> }
             {!isLoading && 
                 <div>
+                    <h2 className='text-center mt-2' >Welcome {logUser} </h2>
                     <div className='btn-div'>
                         <Link to ={`/diary/${id}/addpost`}>
                             <button className='btn btn-success btn-diary'>Add Diary</button>

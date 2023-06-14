@@ -7,6 +7,7 @@ const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const {User} = require("./models/user");
 
+
 mongoose.connect(process.env.DB,{useNewUrlParser:true,useUnifiedTopology:true});
 
 app.use(express.json());
@@ -20,10 +21,10 @@ const postSchema = new mongoose.Schema({
         type: String,
         required: true
       },
-      post: {
+    post: {
           type: String,
           required: true
-      }
+    }
 })
 
 
@@ -38,6 +39,7 @@ const diarySchema = new mongoose.Schema({
 
 const postModel = mongoose.model("post",postSchema);
 const diaryModel = mongoose.model("diary",diarySchema);
+
 
 
 app.post("/addpost", async (req,res)=>{
@@ -77,14 +79,21 @@ app.get("/diary/:id",async function(req,res){
     const user = await User.findOne({_id:id});
     if(user) {
         const userEmail = user.email;
-        await diaryModel.findOne({emailId:userEmail})
-        .then(function(foundDiary) {
-            const diary = foundDiary.diary;
-            res.json(diary);
-        })
-        .catch(function(err){
-            res.status(400).send({message:"No Diaries Found !!"});
-        })
+        const diaryData = await diaryModel.findOne({emailId:userEmail})
+        if(diaryData) {
+            const diaryDetails = {
+                firstName: user.firstName,
+                diary: diaryData.diary
+            }
+            res.json(diaryDetails);
+        }
+        else {
+            const diaryDetails = {
+                firstName: user.firstName,
+                diary: []
+            }
+            res.json(diaryDetails);
+        }
     } else {
         res.status(400).send({message:"No Users Found !!"});
     }
