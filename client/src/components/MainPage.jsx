@@ -4,10 +4,9 @@ import "./mainpage.css";
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 
-const MainPage = () => {
+const MainPage = ({allDiaries,setAllDiaries}) => {
 
     const [logUser,setLogUser] = useState("");
-    const [allDiaries,setAllDiaries] = useState([]);
     const [isLoading,setIsLoading] = useState(true);
     const {id} = useParams();
 
@@ -28,11 +27,29 @@ const MainPage = () => {
             }
         }
         fetchDiary();
-    },[id])
+    },[id,setAllDiaries])
 
     const handleClick = () => {
         localStorage.removeItem("token");
         window.location.reload();
+    }
+
+    const handleDelete = async (id) => {
+        if(window.confirm("Are you sure you want to delete ?")) {
+            try {
+                const response = await axios.delete(`http://localhost:8080/diary/${id}`);
+                console.log(response);
+                window.location.reload();
+            } 
+            catch(err) {
+                console.log(err);
+            }
+        }
+    }
+
+    const handleEdit = async (id) => {
+        console.log(id);
+
     }
 
     return (
@@ -53,6 +70,12 @@ const MainPage = () => {
                                 <div key={diary._id}  className='card diary'>
                                     <h1>{diary.title}</h1>
                                     <p>{diary.post}</p>
+                                    <div>
+                                        <button onClick={()=>handleDelete(diary._id)}  className='btn dlt-btn btn-danger btn-md' ><i className="bi bi-trash-fill"></i></button>
+                                        <Link to={`/editdiary/${diary._id}`} >
+                                            <button onClick={()=>handleEdit(diary._id)}  className='btn dlt-btn btn-info btn-md' ><i className="bi bi-pencil-square"></i></button>
+                                        </Link>                                       
+                                    </div>
                                 </div>
                             )
                         })

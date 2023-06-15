@@ -10,3 +10,8 @@
     padding: 15px;
     text-align: justify;
 }
+
+.dlt-btn {
+    float: right;
+    margin-right: 10px;
+}

@@ -100,6 +100,39 @@ app.get("/diary/:id",async function(req,res){
 })
 
 
+app.delete("/diary/:id",async (req,res)=> {
+    const id = req.params.id;
+    await diaryModel.updateOne({},{
+        $pull: {
+            diary: {
+                _id: id
+            }
+        }
+    })
+    .then(function(){
+        res.json("Deleted successfully");
+    })
+    .catch(function(err){
+        console.log(err);
+    })
+})
+
+app.put("/editdiary/:id",async (req,res)=>{
+    const id = req.params.id;
+    const title = req.body.title;
+    const post = req.body.post;
+    await diaryModel.updateOne({'diary._id':id},{'$set':{
+        'diary.$.title': title,
+        'diary.$.post': post
+    }})
+    .then(function(){
+        res.json("updated successfully");
+    })
+    .catch(function(err){
+        console.log(err);
+    })
+})
+
 app.get("/getAllUsers",async (req,res)=>{
 
     await User.find({})

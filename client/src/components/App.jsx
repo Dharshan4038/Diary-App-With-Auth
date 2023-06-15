@@ -9,6 +9,7 @@ import "./login.css";
 import { AddDiary } from './AddDiary';
 import AdminPage from './AdminPage';
 import UserPosts from './UserPosts';
+import EditDiary from './EditDiary';
 
 const App = () => {
   const user = localStorage.getItem("token");
@@ -19,8 +20,11 @@ const App = () => {
   
   
   const [error,setError] = useState("");
+  const [allDiaries,setAllDiaries] = useState([]);
   const [postTitle,setPostTitle] = useState("");
   const [postBody,setPostBody] = useState("");
+  const [editTitle,setEditTitle] = useState("");
+  const [editBody,setEditBody] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -50,7 +54,6 @@ const App = () => {
   }
 
   const handleAddSubmit = async (id) => {
-        console.log("asd",id);
         const uId = id;
         try {
             const res = await axios.get(`http://localhost:8080/getUser/${uId}`);
@@ -73,12 +76,24 @@ const App = () => {
               console.log(`Error: ${err.message}`);
             }
         }
-}
+    }
 
+    const handleEditSubmit = async (id) => {
+        const editValue = {id:id,title:editTitle,post:editBody}
+        try {
+            const response = await axios.put(`http://localhost:8080/editdiary/${id}`,editValue);
+            console.log(response);
+            navigate(-1);
+        }
+        catch(err) {
+            console.log(`Error: ${err.message}`);
+        }
+    }
+ 
   return (
     <div>
         <Routes>
-            {user && <Route path='/diary/:id' element={<MainPage />} />}
+            {user && <Route path='/diary/:id' element={<MainPage allDiaries={allDiaries} setAllDiaries={setAllDiaries}  />} />}
             <Route path='/signup' element={<Signup />} />
             <Route path='/login' element={<Login data={data} setData={setData} error={error} handleSubmit={handleSubmit}  />} />
             <Route path='/diary/:id' element={<Navigate replace to="/login" />} />
@@ -94,6 +109,7 @@ const App = () => {
             />
             <Route path='/admin' element={<AdminPage />} /> 
             <Route path='/userpost/:id' element={<UserPosts />} />
+            <Route path='/editdiary/:id' element={<EditDiary allDiaries={allDiaries} editTitle={editTitle} editBody={editBody} setEditTitle={setEditTitle} setEditBody={setEditBody} handleEditSubmit={handleEditSubmit}  />} />
         </Routes>
     </div>
   )
