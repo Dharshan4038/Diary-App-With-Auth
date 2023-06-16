@@ -23,8 +23,10 @@ const App = () => {
   const [allDiaries,setAllDiaries] = useState([]);
   const [postTitle,setPostTitle] = useState("");
   const [postBody,setPostBody] = useState("");
+  const [image,setImage] = useState("");
   const [editTitle,setEditTitle] = useState("");
   const [editBody,setEditBody] = useState("");
+//   const [editImage,setEditImage] = useState("");
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -57,13 +59,18 @@ const App = () => {
         const uId = id;
         try {
             const res = await axios.get(`http://localhost:8080/getUser/${uId}`);
-            const newUser = res.data;
-            const userEmailId = newUser;
-            const newPost =  {emailId:userEmailId,title:postTitle,post:postBody};
-            const response = await axios.post("http://localhost:8080/addpost",newPost);
+            const userEmailId = res.data;
+            // const newPost =  {emailId:userEmailId,title:postTitle,post:postBody};
+            const formData = new FormData();
+            formData.append('emailId',userEmailId);
+            formData.append('title',postTitle);
+            formData.append('post',postBody);
+            formData.append('image',image);
+            const response = await axios.post("http://localhost:8080/addpost",formData);
             console.log(response);
             setPostTitle("");
             setPostBody("");
+            setImage("");
             navigate(`/diary/${id}`);
         }
         catch(err) {
@@ -80,6 +87,11 @@ const App = () => {
 
     const handleEditSubmit = async (id) => {
         const editValue = {id:id,title:editTitle,post:editBody}
+        // const editFormdata = new FormData();
+        // editFormdata.append('id',id);
+        // editFormdata.append('title',editTitle);
+        // editFormdata.append('post',editBody);
+        // editFormdata.append('imageUrl',editImage);
         try {
             const response = await axios.put(`http://localhost:8080/editdiary/${id}`,editValue);
             console.log(response);
@@ -105,7 +117,9 @@ const App = () => {
                     postTitle={postTitle}
                     setPostTitle={setPostTitle}
                     postBody={postBody}
-                    setPostBody={setPostBody} />} 
+                    setPostBody={setPostBody}
+                    image={image}
+                    setImage={setImage} />} 
             />
             <Route path='/admin' element={<AdminPage />} /> 
             <Route path='/userpost/:id' element={<UserPosts />} />

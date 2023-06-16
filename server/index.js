@@ -6,12 +6,15 @@ const mongoose = require("mongoose");
 const userRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 const {User} = require("./models/user");
-
+const multer = require("multer");
+const upload = multer({dest:'uploads/'});
 
 mongoose.connect(process.env.DB,{useNewUrlParser:true,useUnifiedTopology:true});
 
 app.use(express.json());
 app.use(cors());
+app.use('/uploads',express.static('uploads'));
+
 
 app.use("/api/users",userRoutes);
 app.use("/api/auth",authRoutes);
@@ -24,6 +27,10 @@ const postSchema = new mongoose.Schema({
     post: {
           type: String,
           required: true
+    },
+    imageUrl: {
+        type: String,
+        required: true
     }
 })
 
@@ -42,10 +49,12 @@ const diaryModel = mongoose.model("diary",diarySchema);
 
 
 
-app.post("/addpost", async (req,res)=>{
+app.post("/addpost", upload.single('image') ,async (req,res)=>{
+    
     const post = new postModel({
         title: req.body.title,
-        post: req.body.post
+        post: req.body.post,
+        imageUrl: req.file.path
     })
     await post.save();
 
@@ -55,7 +64,7 @@ app.post("/addpost", async (req,res)=>{
         diaryModel.updateOne({emailId:req.body.emailId},{$push:{diary:post}})
         .then(function(){
             console.log("diary added !");
-            res.status(200).send({message:"Diary Added Successfully"});
+            res.json(post);
         })
         .catch(function(err){
             console.log(err);
@@ -121,9 +130,11 @@ app.put("/editdiary/:id",async (req,res)=>{
     const id = req.params.id;
     const title = req.body.title;
     const post = req.body.post;
+    // const imageUrl = req.file.path;
     await diaryModel.updateOne({'diary._id':id},{'$set':{
         'diary.$.title': title,
         'diary.$.post': post
+        // 'diary.$.imageUrl': imageUrl
     }})
     .then(function(){
         res.json("updated successfully");

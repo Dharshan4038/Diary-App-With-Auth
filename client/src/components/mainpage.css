@@ -4,6 +4,8 @@
 }
 
 .diary {
+    display: flex;
+    flex-direction: row;
     width: 60%;
     height: 200x;
     margin: 1rem auto;
@@ -11,7 +13,10 @@
     text-align: justify;
 }
 
+.img-div {
+    margin-right: 20px;
+}
+
 .dlt-btn {
-    float: right;
-    margin-right: 10px;
+    margin-right: 15px;
 }

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 
 const EditDiary = ({allDiaries,editTitle,editBody,setEditTitle,setEditBody,handleEditSubmit}) => {
-    
+    console.log(allDiaries);
     const {id} = useParams();
     const diary = allDiaries.find((diary)=>(diary._id)===id);
 
@@ -32,6 +32,7 @@ const EditDiary = ({allDiaries,editTitle,editBody,setEditTitle,setEditBody,handl
                     <div className="col-sm-10">
                         <textarea value={editBody} onChange={(e)=> setEditBody(e.target.value)} cols="30" rows="10" style={{width: "100%",resize:"none"}} required></textarea>
                     </div>
+                    {/* <input style={{border:"none"}} onChange={(e)=>setEditImage(e.target.files[0])} type="file" /> */}
                     </div>
                     <button type="submit" className="btn btn-primary mx-5 mt-3 btn-lg" onClick={()=>handleEditSubmit(id)} >Update</button>
                 </form>

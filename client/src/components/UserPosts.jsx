@@ -41,8 +41,13 @@ const UserPosts = () => {
                         userDiaries.map((diary,index) => {
                             return (
                                 <div key={index} className='card cd mb-3'>
-                                    <h1>{diary.title}</h1>
-                                    <p>{diary.post}</p>
+                                    <div className='img-div'>
+                                        <img style={{width:"150px",height:"150px"}} src={`http://localhost:8080/${diary?.imageUrl}`} alt='' />
+                                    </div>
+                                    <div>
+                                        <h1>{diary.title}</h1>
+                                        <p>{diary.post}</p>
+                                    </div>
                                 </div>
                             )
                         })

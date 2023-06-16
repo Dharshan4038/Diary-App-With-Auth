@@ -47,10 +47,6 @@ const MainPage = ({allDiaries,setAllDiaries}) => {
         }
     }
 
-    const handleEdit = async (id) => {
-        console.log(id);
-
-    }
 
     return (
         <div>
@@ -68,13 +64,18 @@ const MainPage = ({allDiaries,setAllDiaries}) => {
                         allDiaries.map((diary)=>{
                             return (
                                 <div key={diary._id}  className='card diary'>
-                                    <h1>{diary.title}</h1>
-                                    <p>{diary.post}</p>
+                                    <div className='img-div' >
+                                         <img style={{width:"150px",height:"150px"}} src={`http://localhost:8080/${diary?.imageUrl}`} alt='' />
+                                    </div>
                                     <div>
-                                        <button onClick={()=>handleDelete(diary._id)}  className='btn dlt-btn btn-danger btn-md' ><i className="bi bi-trash-fill"></i></button>
-                                        <Link to={`/editdiary/${diary._id}`} >
-                                            <button onClick={()=>handleEdit(diary._id)}  className='btn dlt-btn btn-info btn-md' ><i className="bi bi-pencil-square"></i></button>
-                                        </Link>                                       
+                                        <h1>{diary.title}</h1>
+                                        <p>{diary.post}</p>
+                                        <div className='post-btn' >
+                                            <button onClick={()=>handleDelete(diary._id)}  className='btn dlt-btn btn-danger' ><i className="bi bi-trash-fill"></i></button>
+                                            <Link to={`/editdiary/${diary._id}`} >
+                                                <button className='btn btn-info' ><i className="bi bi-pencil-square"></i></button>
+                                            </Link>                                       
+                                        </div>
                                     </div>
                                 </div>
                             )

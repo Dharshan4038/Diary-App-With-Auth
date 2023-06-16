@@ -1,4 +1,6 @@
 .cd {
+    display: flex;
+    flex-direction: row;
     width: 60%;
     height: 30%;
     margin: auto;
